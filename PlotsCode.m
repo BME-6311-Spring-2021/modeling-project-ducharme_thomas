@@ -259,7 +259,7 @@ title('D')
 
 sgtitle('Average Trial Data (n=10)')
 
-%% Days to Clearance
+%% Days to Clearance - Neutrohil Inhibition
 
 % Import Data
 DaysToClearance=importdata('DaysToClearData.csv');
@@ -276,7 +276,7 @@ xl.LabelHorizontalAlignment = 'center';
 xlabel('Days to Clearance');
 ylabel('Frequency')
 legend('Distribution','Normal Distribution Fit')
-title('Low Macrophage Response')
+title('Low Macrophage Response with Neutrophil Inhibition')
 text(11,13,'Lilliefors p-value >0.5')
 
 subplot(3,1,2)
@@ -287,7 +287,7 @@ xl.LabelHorizontalAlignment = 'center';
 xlabel('Days to Clearance');
 ylabel('Frequency')
 legend('Distribution','Normal Distribution Fit')
-title('Normal Macrophage Response')
+title('Normal Macrophage Response with Neutrophil Inhibition')
 text(7.04,13,'Lilliefors p-value >0.5')
 
 subplot(3,1,3)
@@ -298,12 +298,57 @@ xl.LabelHorizontalAlignment = 'center';
 xlabel('Days to Clearance');
 ylabel('Frequency')
 legend('Distribution','Normal Distribution Fit')
-title('High Macrophage Response')
+title('High Macrophage Response with Neutrophil Inhibition')
 text(6.35,13,'Lilliefors p-value = 0.2472')
 
 sgtitle('Histograms of Days to Clearance for Different Macrophage Response Levels')
 
-%%
+%% Days to Clearance - Normal Neutrophils
+
+% Import Data
+DaysToClearance=importdata('DaysToClearData.csv');
+LowN=DaysToClearance.data(91:120,2);
+NormalN=DaysToClearance.data(121:150,2);
+HighN=DaysToClearance.data(151:end,2);
+
+figure
+subplot(3,1,1)
+histfit(LowN,5)
+xl=xline(mean(LowN),'--k',{'Average'});
+xl.LabelVerticalAlignment = 'middle';
+xl.LabelHorizontalAlignment = 'center';
+xlabel('Days to Clearance');
+ylabel('Frequency')
+legend('Distribution','Normal Distribution Fit')
+title('Low Macrophage Response with Normal Neutrophil Function')
+text(6,13,'Lilliefors p-value = 0.3036')
+
+subplot(3,1,2)
+histfit(NormalN,5)
+xl=xline(mean(NormalN),'--k',{'Average'});
+xl.LabelVerticalAlignment = 'middle';
+xl.LabelHorizontalAlignment = 'center';
+xlabel('Days to Clearance');
+ylabel('Frequency')
+legend('Distribution','Normal Distribution Fit')
+title('Normal Macrophage Response with Normal Neutrophil Function')
+text(5.6,13,'Lilliefors p-value = 0.1640')
+
+subplot(3,1,3)
+histfit(HighN,5)
+xl=xline(mean(HighN),'--k',{'Average'});
+xl.LabelVerticalAlignment = 'middle';
+xl.LabelHorizontalAlignment = 'center';
+xlabel('Days to Clearance');
+ylabel('Frequency')
+legend('Distribution','Normal Distribution Fit')
+title('High Macrophage Response with Normal Neutrophil Function')
+text(5.58,9,'Lilliefors p-value = 0.1078')
+
+sgtitle('Histograms of Days to Clearance for Different Macrophage Response Levels with Normal Neutrophil Function')
+
+
+%% Statistical Tests - Inhibited Neutrophils
 %Lilliefors test for normality
 [hL,pL]=lillietest(Low);
 [hN,pN]=lillietest(Normal);
@@ -317,3 +362,20 @@ pH
 [h2,p2,ci2,stats2]=ttest2(High,Normal);
 p1
 p2
+
+%% Statistical Tests - Normal Neutrophil Response
+%Lilliefors test for normality
+[hL,pL]=lillietest(LowN);
+[hN,pN]=lillietest(NormalN);
+[hH,pH]=lillietest(HighN);
+pL
+pN
+pH
+
+%t-test to compare to inhibited data
+[h1,p1,ci1,stats1]=ttest2(Low,LowN);
+[h2,p2,ci2,stats2]=ttest2(Normal,NormalN);
+[h3,p3,ci3,stats3]=ttest2(High,HighN);
+p1
+p2
+p3
